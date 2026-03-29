@@ -16,12 +16,4 @@ public class GymClass{
     public String trainer(){
         return trainer;
     }
-
-    public void setName(String name){
-        this.name = name;
-    }
-
-    public void setTrainer(String trainer){
-        this.trainer = trainer;
-    }
 }
