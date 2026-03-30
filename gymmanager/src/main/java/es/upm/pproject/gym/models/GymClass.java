@@ -1,4 +1,4 @@
-package gym.models;
+package es.upm.pproject.gym.models;
 
 public class GymClass{
     private String name;

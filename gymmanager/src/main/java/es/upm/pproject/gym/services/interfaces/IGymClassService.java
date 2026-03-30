@@ -1,7 +1,7 @@
-package gym.services.interfaces;
+package es.upm.pproject.gym.services.interfaces;
 
-import gym.models.GymClass;
-import gym.services.exceptions.ClassNotFoundException;
+import es.upm.pproject.gym.models.GymClass;
+import es.upm.pproject.gym.services.exceptions.ClassNotFoundException;
 
 public interface IGymClassService {
 

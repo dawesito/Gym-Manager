@@ -1,6 +1,6 @@
-package gym.services.interfaces;
+package es.upm.pproject.gym.services.interfaces;
 
-import gym.models.Person;
+import es.upm.pproject.gym.models.Person;
 
 public interface IPersonService {
 

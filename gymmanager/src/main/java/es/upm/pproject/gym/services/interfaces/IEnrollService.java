@@ -1,9 +1,9 @@
-package gym.services.interfaces;
+package es.upm.pproject.gym.services.interfaces;
 
-import gym.models.Person;
-import gym.services.exceptions.ClassNotFoundException;
-import gym.services.exceptions.EnrollmentNotFoundException;
-import gym.services.exceptions.MemberNotFoundException;
+import es.upm.pproject.gym.models.Person;
+import es.upm.pproject.gym.services.exceptions.ClassNotFoundException;
+import es.upm.pproject.gym.services.exceptions.EnrollmentNotFoundException;
+import es.upm.pproject.gym.services.exceptions.MemberNotFoundException;
 
 public interface IEnrollService {
 
