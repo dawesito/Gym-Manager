@@ -1,4 +1,4 @@
-package gym.services.exceptions;
+package es.upm.pproject.gym.services.exceptions;
 
 public class MemberNotFoundException extends Exception {
 
