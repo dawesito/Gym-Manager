@@ -9,7 +9,7 @@ public interface IGymClassService {
 
     public GymClass[] getAllClasses(); // Returns a list of all registered gym classes sorted by name.
     
-    public void restartClass(String name) throws ClassNotFoundException; // Removes all enrolled people in the class
+    public void restartClass(String name) throws ClassNotFoundException, NullPointerException; // Removes all enrolled people in the class
 
     /*
         Debería estar en IEnroll??
