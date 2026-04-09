@@ -1,16 +1,17 @@
 package es.upm.pproject.gym.infrastructure.interfaces;
 
 import es.upm.pproject.gym.models.GymClass;
+import es.upm.pproject.gym.services.exceptions.ClassNotFoundException;
 
 public interface IGymClassInfrastructure {
 
-    public void registerClass(String name, String trainer); // Registers class in the system.
+    public void registerClass(String name, String trainer);
 
-    public GymClass[] getAllClasses(); // Returns a list of all registered gym classes sorted by name.
+    public GymClass[] getAllClasses();
 
-    public boolean isClassRegistered(String name); // Returns true if a class with that name already exists.
+    public boolean isClassRegistered(String name);
 
-    public void restartClass(String name); // Removes all enrolled people in the class
+    public void restartClass(String name) throws ClassNotFoundException, java.lang.ClassNotFoundException;
 
     /*
         ¿restartClass necesitaría throw ClassNotFoundException?
