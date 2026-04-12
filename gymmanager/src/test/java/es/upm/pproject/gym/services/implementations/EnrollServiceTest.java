@@ -11,7 +11,7 @@ import es.upm.pproject.gym.services.interfaces.IEnrollService;
 import es.upm.pproject.gym.services.interfaces.IGymClassService;
 import es.upm.pproject.gym.services.interfaces.IPersonService;
 
-public class EnrollServiceTest {
+class EnrollServiceTest {
 
     private IEnrollService enrollService;
     private IPersonService personService;

@@ -8,7 +8,7 @@ import es.upm.pproject.gym.infrastructure.implementations.InfrastructureFactory;
 import es.upm.pproject.gym.models.Person;
 import es.upm.pproject.gym.services.interfaces.IPersonService;
 
-public class PersonServiceTest {
+class PersonServiceTest {
 
     private IPersonService personService;
 

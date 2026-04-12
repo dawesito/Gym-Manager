@@ -8,7 +8,7 @@ import es.upm.pproject.gym.infrastructure.implementations.InfrastructureFactory;
 import es.upm.pproject.gym.models.GymClass;
 import es.upm.pproject.gym.services.interfaces.IGymClassService;
 
-public class GymClassServiceTest {
+class GymClassServiceTest {
 
     private IGymClassService gymClassService;
 

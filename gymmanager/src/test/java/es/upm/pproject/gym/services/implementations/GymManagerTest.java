@@ -11,7 +11,7 @@ import es.upm.pproject.gym.services.exceptions.*;
 import es.upm.pproject.gym.services.exceptions.ClassNotFoundException;
 import es.upm.pproject.gym.services.interfaces.IGymManager;
 
-public class GymManagerTest {
+class GymManagerTest {
 
     private IGymManager gymManager;
 

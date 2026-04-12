@@ -13,9 +13,12 @@ import java.util.Arrays;
 import es.upm.pproject.gym.services.exceptions.MemberNotFoundException;
 import es.upm.pproject.gym.services.exceptions.PrimaryKeyDuplication;
 import es.upm.pproject.gym.services.exceptions.EnrollmentNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class EnrollInfrastructure implements IEnrollInfrastructure {
 
+    private static final Logger logger = LoggerFactory.getLogger(EnrollInfrastructure.class);
     private static Map<String, List<String>> enrollments = new HashMap<>();
     private static final String FILE_NAME = "enrollments.csv";
 
@@ -24,24 +27,22 @@ class EnrollInfrastructure implements IEnrollInfrastructure {
     }
 
     private static void load() {
-
+        logger.debug("Loading enrollments from {}", FILE_NAME);
         List<String[]> data = PersistenceManager.readCSV(FILE_NAME);
 
         for (String[] row : data) {
-
             if (row.length >= 2) {
-
                 List<String> rowList = Arrays.asList(row);
-
                 String className = rowList.get(0);
                 List<String> mails = new ArrayList<>(rowList.subList(1, rowList.size()));
-
                 enrollments.put(className, mails);
             }
         }
+        logger.debug("Loaded enrollments for {} classes", enrollments.size());
     }
 
     private static void save() {
+        logger.debug("Saving enrollments to {}", FILE_NAME);
         List<String[]> data = new ArrayList<>();
         for (Map.Entry<String, List<String>> entry : enrollments.entrySet()) {
             List<String> row = new ArrayList<>();
@@ -55,20 +56,25 @@ class EnrollInfrastructure implements IEnrollInfrastructure {
     @Override
     public void enroll(String mailAdress, String name) throws MemberNotFoundException, ClassNotFoundException, PrimaryKeyDuplication {
         if (!PersonInfrastructure.isPersonRegisteredStatic(mailAdress)) {
+            logger.error("Enrollment failed: Member {} not registered", mailAdress);
             throw new MemberNotFoundException("Member with mail " + mailAdress + " not found");
         }
         if (!GymClassInfrastructure.classExists(name)) {
+            logger.error("Enrollment failed: Class {} not found", name);
             throw new ClassNotFoundException("Class " + name + " not found");
         }
         if(isPersonEnrolled(mailAdress, name)) {
+            logger.error("Enrollment failed: Member {} already enrolled in {}", mailAdress, name);
             throw new PrimaryKeyDuplication("Member with mail " + mailAdress + " is already enrolled in class " + name);
         }
         enrollments.computeIfAbsent(name, k -> new ArrayList<>()).add(mailAdress);
+        logger.info("Enrolled {} in class {}", mailAdress, name);
         save();
     }
 
     @Override
     public void reset() {
+        logger.warn("Resetting all enrollments");
         enrollments.clear();
         save();
     }
@@ -83,22 +89,27 @@ class EnrollInfrastructure implements IEnrollInfrastructure {
     public void cancelEnrollment(String mailAdress, String name)
             throws MemberNotFoundException, ClassNotFoundException, EnrollmentNotFoundException {
         if (!PersonInfrastructure.isPersonRegisteredStatic(mailAdress)) {
+            logger.error("Cancel enrollment failed: Member {} not registered", mailAdress);
             throw new MemberNotFoundException("Member with mail " + mailAdress + " not found");
         }
         if (!GymClassInfrastructure.classExists(name)) {
+            logger.error("Cancel enrollment failed: Class {} not found", name);
             throw new ClassNotFoundException("Class " + name + " not found");
         }
         List<String> enrolled = enrollments.get(name);
         if (enrolled == null || !enrolled.contains(mailAdress)) {
+            logger.error("Cancel enrollment failed: Member {} not enrolled in {}", mailAdress, name);
             throw new EnrollmentNotFoundException("Member " + mailAdress + " is not enrolled in class " + name);
         }
         enrolled.remove(mailAdress);
+        logger.info("Cancelled enrollment for {} in class {}", mailAdress, name);
         save();
     }
 
     @Override
     public Person[] getClassEnrolledPeople(String name) throws ClassNotFoundException {
         if (!GymClassInfrastructure.classExists(name)) {
+            logger.error("Get enrolled people failed: Class {} not found", name);
             throw new ClassNotFoundException("Class " + name + " not found");
         }
         List<String> enrolledMails = enrollments.get(name);
@@ -119,6 +130,7 @@ class EnrollInfrastructure implements IEnrollInfrastructure {
     @Override
     public int getClassEnrolledAmmount(String name) throws ClassNotFoundException {
         if (!GymClassInfrastructure.classExists(name)) {
+            logger.error("Get enrollment count failed: Class {} not found", name);
             throw new ClassNotFoundException("Class " + name + " not found");
         }
         List<String> enrolled = enrollments.get(name);
@@ -126,6 +138,7 @@ class EnrollInfrastructure implements IEnrollInfrastructure {
     }
 
     public static void clearEnrollmentsForClass(String name) {
+        logger.info("Clearing all enrollments for class {}", name);
         enrollments.remove(name);
         save();
     }

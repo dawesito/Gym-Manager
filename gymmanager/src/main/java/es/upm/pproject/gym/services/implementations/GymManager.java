@@ -11,9 +11,12 @@ import es.upm.pproject.gym.services.interfaces.IEnrollService;
 import es.upm.pproject.gym.services.interfaces.IGymClassService;
 import es.upm.pproject.gym.services.interfaces.IGymManager;
 import es.upm.pproject.gym.services.interfaces.IPersonService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GymManager implements IGymManager {
 
+    private static final Logger logger = LoggerFactory.getLogger(GymManager.class);
     private final IPersonService personService;
     private final IGymClassService classService;
     private final IEnrollService enrollService;
@@ -26,46 +29,55 @@ public class GymManager implements IGymManager {
 
     @Override
     public void registerClass(String name, String trainer) throws PrimaryKeyDuplication, NullPointerException, IllegalArgumentException {
+        logger.info("Registering class: {} with trainer: {}", name, trainer);
         classService.registerClass(name, trainer);
     }
 
     @Override
     public void registerPerson(Integer id, String name, String email) throws PrimaryKeyDuplication, NullPointerException, IllegalArgumentException {
+        logger.info("Registering person: {} with id: {} and email: {}", name, id, email);
         personService.registerPerson(id, name, email);
     }
 
     @Override
     public void enroll(String email, String className) throws MemberNotFoundException, ClassNotFoundException, FullClassException, PrimaryKeyDuplication, NullPointerException {
+        logger.info("Enrolling email: {} in class: {}", email, className);
         enrollService.enroll(email, className);
     }
 
     @Override
     public Person[] getClassEnrolledPeople(String className) throws ClassNotFoundException, NullPointerException {
+        logger.info("Getting enrolled people for class: {}", className);
         return enrollService.getClassEnrolledPeople(className);
     }
 
     @Override
     public void cancelEnrollment(String email, String className) throws EnrollmentNotFoundException, MemberNotFoundException, ClassNotFoundException, NullPointerException {
+        logger.info("Cancelling enrollment for email: {} in class: {}", email, className);
         enrollService.cancelEnrollment(email, className);
     }
 
     @Override
     public void restartClass(String className) throws ClassNotFoundException, NullPointerException {
+        logger.info("Restarting class: {}", className);
         classService.restartClass(className);
     }
 
     @Override
     public Person[] getAllUsers() {
+        logger.info("Listing all registered people");
         return personService.getAllUsers();
     }
 
     @Override
     public GymClass[] getAllClasses() {
+        logger.info("Listing all registered classes");
         return classService.getAllClasses();
     }
 
     @Override
     public void reset() {
+        logger.warn("Resetting all gym data");
         // We can't directly access infra from services if they are not exposed.
         // But for testing purposes, we can either add reset to services or use another way.
         // Let's assume we can get them from the factory or just use the static nature (though not ideal).
