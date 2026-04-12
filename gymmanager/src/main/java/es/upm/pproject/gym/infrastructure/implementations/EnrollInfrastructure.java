@@ -10,9 +10,10 @@ import java.util.List;
 import java.util.Map;
 
 import es.upm.pproject.gym.services.exceptions.MemberNotFoundException;
+import es.upm.pproject.gym.services.exceptions.PrimaryKeyDuplication;
 import es.upm.pproject.gym.services.exceptions.EnrollmentNotFoundException;
 
-public class EnrollInfrastructure implements IEnrollInfrastructure {
+class EnrollInfrastructure implements IEnrollInfrastructure {
 
     private static Map<String, List<String>> enrollments = new HashMap<>();
     private static final String FILE_NAME = "enrollments.csv";
@@ -47,14 +48,23 @@ public class EnrollInfrastructure implements IEnrollInfrastructure {
     }
 
     @Override
-    public void enroll(String mailAdress, String name) throws MemberNotFoundException, ClassNotFoundException {
+    public void enroll(String mailAdress, String name) throws MemberNotFoundException, ClassNotFoundException, PrimaryKeyDuplication {
         if (!PersonInfrastructure.isPersonRegisteredStatic(mailAdress)) {
             throw new MemberNotFoundException("Member with mail " + mailAdress + " not found");
         }
         if (!GymClassInfrastructure.classExists(name)) {
             throw new ClassNotFoundException("Class " + name + " not found");
         }
+        if(isPersonEnrolled(mailAdress, name)) {
+            throw new PrimaryKeyDuplication("Member with mail " + mailAdress + " is already enrolled in class " + name);
+        }
         enrollments.computeIfAbsent(name, k -> new ArrayList<>()).add(mailAdress);
+        save();
+    }
+
+    @Override
+    public void reset() {
+        enrollments.clear();
         save();
     }
 
@@ -103,8 +113,6 @@ public class EnrollInfrastructure implements IEnrollInfrastructure {
 
     @Override
     public int getClassEnrolledAmmount(String name) throws ClassNotFoundException {
-        // In a real case, here we should verify if the class exists
-        // We use GymClassInfrastructure to validate the class
         if (!GymClassInfrastructure.classExists(name)) {
             throw new ClassNotFoundException("Class " + name + " not found");
         }

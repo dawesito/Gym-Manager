@@ -3,12 +3,15 @@ package es.upm.pproject.gym.infrastructure.implementations;
 import es.upm.pproject.gym.infrastructure.interfaces.IGymClassInfrastructure;
 import es.upm.pproject.gym.models.GymClass;
 
+import es.upm.pproject.gym.services.exceptions.ClassNotFoundException;
+import es.upm.pproject.gym.services.exceptions.PrimaryKeyDuplication;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GymClassInfrastructure implements IGymClassInfrastructure {
+class GymClassInfrastructure implements IGymClassInfrastructure {
 
     private static Map<String, GymClass> classes = new HashMap<>();
     private static final String FILE_NAME = "classes.csv";
@@ -37,8 +40,18 @@ public class GymClassInfrastructure implements IGymClassInfrastructure {
     }
 
     @Override
-    public void registerClass(String name, String trainer) {
+    public void registerClass(String name, String trainer) throws PrimaryKeyDuplication {
+        if (isClassRegistered(name)){
+            throw new PrimaryKeyDuplication("Class by name " + name + " is already registered");
+        }
+
         classes.put(name, new GymClass(name, trainer));
+        save();
+    }
+
+    @Override
+    public void reset() {
+        classes.clear();
         save();
     }
 

@@ -4,6 +4,10 @@ import es.upm.pproject.gym.infrastructure.interfaces.IGymClassInfrastructure;
 import es.upm.pproject.gym.models.GymClass;
 import es.upm.pproject.gym.services.interfaces.IGymClassService;
 import es.upm.pproject.gym.services.exceptions.ClassNotFoundException;
+import es.upm.pproject.gym.services.exceptions.PrimaryKeyDuplication;
+
+import java.util.Arrays;
+import java.util.Comparator;
 
 class GymClassService implements IGymClassService {
 
@@ -13,41 +17,35 @@ class GymClassService implements IGymClassService {
         this.infra = infra;
     }
 
-    public void registerClass(String name, String trainer) throws NullPointerException {
+    @Override
+    public void registerClass(String name, String trainer)
+            throws NullPointerException, PrimaryKeyDuplication, IllegalArgumentException {
         if (name == null || trainer == null) {
             throw new NullPointerException("Arguments name and trainer can't be null");
+        }
+
+        if (name.trim().isEmpty() || trainer.trim().isEmpty()) {
+            throw new IllegalArgumentException("Name and trainer cannot be blank");
         }
 
         infra.registerClass(name, trainer);
     }
 
+    // Added to sort classes by name before returning
+    @Override
     public GymClass[] getAllClasses() {
-
-        return infra.getAllClasses();
+        GymClass[] classes = infra.getAllClasses();
+        Arrays.sort(classes, Comparator.comparing(GymClass::name));
+        return classes;
     }
 
+    @Override
     public void restartClass(String name) throws ClassNotFoundException, NullPointerException {
-        // Quién tiene la responsabilidad de tirar ClassNotFound??
 
         if (name == null) {
             throw new NullPointerException("Argument name can't be null");
         }
 
-        //
-        // Meterle un arreglo para el throw de ClassNotFoundException
-        //
-        try {
-            infra.restartClass(name);
-        } catch (java.lang.ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        //
-        //
-        //
-
+        infra.restartClass(name);
     }
 }

@@ -5,12 +5,13 @@ import es.upm.pproject.gym.services.exceptions.ClassNotFoundException;
 import es.upm.pproject.gym.services.exceptions.EnrollmentNotFoundException;
 import es.upm.pproject.gym.services.exceptions.FullClassException;
 import es.upm.pproject.gym.services.exceptions.MemberNotFoundException;
+import es.upm.pproject.gym.services.exceptions.PrimaryKeyDuplication;
 
 public interface IEnrollService {
 
-    public void enroll(String mailAdress, String name) throws MemberNotFoundException, ClassNotFoundException, FullClassException, NullPointerException; // Enrolls an user in a class, both must exist and the class must have less than 20 users already enrolled.
+    public void enroll(String mailAdress, String name) throws MemberNotFoundException, ClassNotFoundException, FullClassException, PrimaryKeyDuplication, NullPointerException; // Enrolls an user in a class, both must exist and the class must have less than 20 users already enrolled.
 
-    public void cancelEnrollment(String mailAdress, String name) throws EnrollmentNotFoundException, MemberNotFoundException, NullPointerException; // Cancels the enrollment of an user in a class.
+    public void cancelEnrollment(String mailAdress, String name) throws EnrollmentNotFoundException, MemberNotFoundException, ClassNotFoundException, NullPointerException; // Cancels the enrollment of an user in a class.
 
     /*
         ¿Debería añadir opciones de llamar a esta función con los objetos en vez de con los identificadores?

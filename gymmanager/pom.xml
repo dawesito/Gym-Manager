@@ -28,6 +28,12 @@
         <maven.surefire>3.0.0-M5</maven.surefire>
         <maven.jar>3.2.0</maven.jar>
         <maven.install>3.0.0-M1</maven.install>
+
+        <!-- SONAR -->
+        <sonar.host.url>https://costa.ls.fi.upm.es/sonar</sonar.host.url>
+        <sonar.projectKey>es.upm.pproject.gym:gymmanager</sonar.projectKey>
+        <sonar.projectName>gymmanager</sonar.projectName>
+        <sonar.language>java</sonar.language>
     </properties>
 
     <dependencies>

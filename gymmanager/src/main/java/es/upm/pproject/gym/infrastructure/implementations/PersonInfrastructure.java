@@ -2,13 +2,14 @@ package es.upm.pproject.gym.infrastructure.implementations;
 
 import es.upm.pproject.gym.infrastructure.interfaces.IPersonInfrastructure;
 import es.upm.pproject.gym.models.Person;
+import es.upm.pproject.gym.services.exceptions.PrimaryKeyDuplication;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PersonInfrastructure implements IPersonInfrastructure {
+class PersonInfrastructure implements IPersonInfrastructure {
 
     private static Map<String, Person> users = new HashMap<>();
     private static final String FILE_NAME = "users.csv";
@@ -38,8 +39,18 @@ public class PersonInfrastructure implements IPersonInfrastructure {
     }
 
     @Override
-    public void registerPerson(int id, String name, String mailAdress) {
+    public void registerPerson(int id, String name, String mailAdress) throws PrimaryKeyDuplication{
+        if(isPersonRegistered(mailAdress)){
+            throw new PrimaryKeyDuplication("User with email " + mailAdress + " is already registered");
+        }
+
         users.put(mailAdress, new Person(id, name, mailAdress));
+        save();
+    }
+
+    @Override
+    public void reset() {
+        users.clear();
         save();
     }
 

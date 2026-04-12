@@ -1,15 +1,25 @@
 package es.upm.pproject.gym.services.interfaces;
 
 import es.upm.pproject.gym.models.Person;
+import es.upm.pproject.gym.services.exceptions.PrimaryKeyDuplication;
 
 public interface IPersonService {
 
-    public void registerPerson(Integer id, String name, String mailAdress) throws NullPointerException, IllegalArgumentException; // Registers a person into the system, throws NullPointerException if any of the arguments is null and throws IllegalArgumentException if the mail adress isn't correctly formated 
+    /**
+     * Registers a new person in the gym.
+     * @param id The identification number (cannot be null).
+     * @param name The name of the person (cannot be null or blank).
+     * @param email The email address (cannot be null or blank, must be valid format).
+     * @throws PrimaryKeyDuplication if a person with the same email already exists.
+     * @throws NullPointerException if any argument is null.
+     * @throws IllegalArgumentException if name or email is blank, or email format is invalid.
+     */
+    public void registerPerson(Integer id, String name, String mailAdress) throws NullPointerException, PrimaryKeyDuplication, IllegalArgumentException;
 
-    /*
-        ¿Se pueden repetir email? en caso de que no habría que comprobar en general clave primaria no repetida
-    */
-
+    /**
+     * Returns a list of all registered people in the system, sorted by email.
+     * @return Array of all registered Person objects.
+     */
     public Person[] getAllUsers(); // Returns a list of all registered users sorted by email.
 
 }

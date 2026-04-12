@@ -6,7 +6,11 @@ import es.upm.pproject.gym.services.exceptions.ClassNotFoundException;
 import es.upm.pproject.gym.services.exceptions.EnrollmentNotFoundException;
 import es.upm.pproject.gym.services.exceptions.FullClassException;
 import es.upm.pproject.gym.services.exceptions.MemberNotFoundException;
+import es.upm.pproject.gym.services.exceptions.PrimaryKeyDuplication;
 import es.upm.pproject.gym.services.interfaces.IEnrollService;
+
+import java.util.Arrays;
+import java.util.Comparator;
 
 public class EnrollService implements IEnrollService {
 
@@ -16,57 +20,41 @@ public class EnrollService implements IEnrollService {
         this.infra = infra;
     }
 
+    @Override
     public void enroll(String mailAdress, String name)
-            throws MemberNotFoundException, ClassNotFoundException, FullClassException, NullPointerException {
+            throws MemberNotFoundException, ClassNotFoundException, FullClassException, PrimaryKeyDuplication,
+            NullPointerException {
 
         if (mailAdress == null || name == null) {
             throw new NullPointerException("Arguments name and mailAdress can't be null");
         }
 
-        try {
-            if (infra.getClassEnrolledAmmount(name) >= 20) {
-                throw new FullClassException("Class " + name + " is full");
-            }
-        } catch (ClassNotFoundException e) {
-            throw new ClassNotFoundException("Class " + name + " isn't in the system");
+        if (infra.getClassEnrolledAmmount(name) >= 20) {
+            throw new FullClassException("Class " + name + " is full");
         }
 
-        infra.enroll(mailAdress, name); // Falta tratar MemberNotFoundException y ClassNotFoundException
+        infra.enroll(mailAdress, name);
     }
 
+    @Override
     public void cancelEnrollment(String mailAdress, String name)
-            throws EnrollmentNotFoundException, MemberNotFoundException, NullPointerException {
+            throws EnrollmentNotFoundException, MemberNotFoundException, ClassNotFoundException, NullPointerException {
         if (mailAdress == null || name == null) {
             throw new NullPointerException("Arguments name and mailAdress can't be null");
         }
 
-        //
-        // Lo he tocado para poder manejar los errores.
-        //
-        try {
-            infra.cancelEnrollment(mailAdress, name);
-        } catch (MemberNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (EnrollmentNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        //
-        //
-        //
-
-        // Falta tratar MemberNotFoundException y ClassNotFoundException
+        infra.cancelEnrollment(mailAdress, name);
     }
 
+    @Override
     public Person[] getClassEnrolledPeople(String name) throws ClassNotFoundException, NullPointerException {
         if (name == null) {
             throw new NullPointerException("Argument name can't be null");
         }
 
-        return infra.getClassEnrolledPeople(name); // Falta tratar ClassNotFoundException
+        // Added to sort people by name before returning
+        Person[] people = infra.getClassEnrolledPeople(name);
+        Arrays.sort(people, Comparator.comparing(Person::name));
+        return people;
     }
 }
