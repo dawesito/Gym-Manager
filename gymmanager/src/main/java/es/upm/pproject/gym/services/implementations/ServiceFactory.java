@@ -10,16 +10,20 @@ import es.upm.pproject.gym.services.interfaces.IPersonService;
 
 public class ServiceFactory {
     
+    private ServiceFactory() {
+        // Evita instanciación
+    }
+
     public static IEnrollService getIEnrollService(IEnrollInfrastructure infra){
-        return (IEnrollService) new EnrollService(infra);
+        return new EnrollService(infra);
     }
 
     public static IGymClassService getIGymClassService(IGymClassInfrastructure infra){
-        return (IGymClassService) new GymClassService(infra);
+        return new GymClassService(infra);
     }
 
     public static IPersonService getIPersonService(IPersonInfrastructure infra){
-        return (IPersonService) new PersonService(infra);
+        return new PersonService(infra);
     }
 
     public static IGymManager getGymManager(IPersonService personService, IGymClassService classService, IEnrollService enrollService) {

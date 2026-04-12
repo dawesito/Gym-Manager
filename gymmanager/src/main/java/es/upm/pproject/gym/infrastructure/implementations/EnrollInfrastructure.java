@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Arrays;
 
 import es.upm.pproject.gym.services.exceptions.MemberNotFoundException;
 import es.upm.pproject.gym.services.exceptions.PrimaryKeyDuplication;
@@ -17,21 +18,24 @@ class EnrollInfrastructure implements IEnrollInfrastructure {
 
     private static Map<String, List<String>> enrollments = new HashMap<>();
     private static final String FILE_NAME = "enrollments.csv";
-    private static final int CLASS_NAME_INDEX = 0;
 
     static {
         load();
     }
 
     private static void load() {
+
         List<String[]> data = PersistenceManager.readCSV(FILE_NAME);
+
         for (String[] row : data) {
+
             if (row.length >= 2) {
-                String className = row[CLASS_NAME_INDEX];
-                List<String> mails = new ArrayList<>();
-                for (int i = 1; i < row.length; i++) {
-                    mails.add(row[i]);
-                }
+
+                List<String> rowList = Arrays.asList(row);
+
+                String className = rowList.get(0);
+                List<String> mails = new ArrayList<>(rowList.subList(1, rowList.size()));
+
                 enrollments.put(className, mails);
             }
         }

@@ -10,13 +10,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Arrays;
 
 class GymClassInfrastructure implements IGymClassInfrastructure {
 
     private static Map<String, GymClass> classes = new HashMap<>();
     private static final String FILE_NAME = "classes.csv";
-    private static final int NAME_INDEX = 0;
-    private static final int TRAINER_INDEX = 1;
 
     static {
         load();
@@ -24,10 +23,15 @@ class GymClassInfrastructure implements IGymClassInfrastructure {
 
     private static void load() {
         List<String[]> data = PersistenceManager.readCSV(FILE_NAME);
+
         for (String[] row : data) {
             if (row.length == 2) {
-                String name = row[NAME_INDEX];
-                String trainer = row[TRAINER_INDEX];
+
+                List<String> rowList = Arrays.asList(row);
+
+                String name = rowList.get(0);
+                String trainer = rowList.get(1);
+
                 classes.put(name, new GymClass(name, trainer));
             }
         }

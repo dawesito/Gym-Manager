@@ -6,16 +6,20 @@ import es.upm.pproject.gym.infrastructure.interfaces.IPersonInfrastructure;
 
 public class InfrastructureFactory {
 
+    private InfrastructureFactory() {
+        // Evita instanciación
+    }
+
     public static IEnrollInfrastructure getIEnrollInfrastructure(){
-        return (IEnrollInfrastructure) new EnrollInfrastructure();
+        return new EnrollInfrastructure();
     }
 
     public static IGymClassInfrastructure getIGymClassInfrastructure(){
-        return (IGymClassInfrastructure) new GymClassInfrastructure();
+        return new GymClassInfrastructure();
     }
 
     public static IPersonInfrastructure getIPersonInfrastructure(){
-        return (IPersonInfrastructure) new PersonInfrastructure();
+        return new PersonInfrastructure();
     }
 
 }

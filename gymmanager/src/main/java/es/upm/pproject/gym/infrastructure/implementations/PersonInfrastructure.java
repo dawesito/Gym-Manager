@@ -8,14 +8,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Arrays;
 
 class PersonInfrastructure implements IPersonInfrastructure {
 
     private static Map<String, Person> users = new HashMap<>();
     private static final String FILE_NAME = "users.csv";
-    private static final int ID_INDEX = 0;
-    private static final int NAME_INDEX = 1;
-    private static final int MAIL_INDEX = 2;
 
     static {
         load();
@@ -23,11 +21,16 @@ class PersonInfrastructure implements IPersonInfrastructure {
 
     private static void load() {
         List<String[]> data = PersistenceManager.readCSV(FILE_NAME);
+
         for (String[] row : data) {
             if (row.length == 3) {
-                int id = Integer.parseInt(row[ID_INDEX]);
-                String name = row[NAME_INDEX];
-                String mail = row[MAIL_INDEX];
+
+                List<String> rowList = Arrays.asList(row);
+
+                int id = Integer.parseInt(rowList.get(0));
+                String name = rowList.get(1);
+                String mail = rowList.get(2);
+
                 users.put(mail, new Person(id, name, mail));
             }
         }
