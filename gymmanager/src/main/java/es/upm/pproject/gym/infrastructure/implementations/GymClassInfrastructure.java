@@ -15,6 +15,8 @@ class GymClassInfrastructure implements IGymClassInfrastructure {
 
     private static Map<String, GymClass> classes = new HashMap<>();
     private static final String FILE_NAME = "classes.csv";
+    private static final int NAME_INDEX = 0;
+    private static final int TRAINER_INDEX = 1;
 
     static {
         load();
@@ -24,8 +26,8 @@ class GymClassInfrastructure implements IGymClassInfrastructure {
         List<String[]> data = PersistenceManager.readCSV(FILE_NAME);
         for (String[] row : data) {
             if (row.length == 2) {
-                String name = row[0];
-                String trainer = row[1];
+                String name = row[NAME_INDEX];
+                String trainer = row[TRAINER_INDEX];
                 classes.put(name, new GymClass(name, trainer));
             }
         }

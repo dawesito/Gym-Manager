@@ -17,6 +17,7 @@ class EnrollInfrastructure implements IEnrollInfrastructure {
 
     private static Map<String, List<String>> enrollments = new HashMap<>();
     private static final String FILE_NAME = "enrollments.csv";
+    private static final int CLASS_NAME_INDEX = 0;
 
     static {
         load();
@@ -26,7 +27,7 @@ class EnrollInfrastructure implements IEnrollInfrastructure {
         List<String[]> data = PersistenceManager.readCSV(FILE_NAME);
         for (String[] row : data) {
             if (row.length >= 2) {
-                String className = row[0];
+                String className = row[CLASS_NAME_INDEX];
                 List<String> mails = new ArrayList<>();
                 for (int i = 1; i < row.length; i++) {
                     mails.add(row[i]);
