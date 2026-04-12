@@ -4,7 +4,7 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 
-public class PersistenceManager {
+class PersistenceManager {
 
     private static final String PERSISTENCE_PATH = "persistence/";
 

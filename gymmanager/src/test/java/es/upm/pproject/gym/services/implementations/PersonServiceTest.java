@@ -3,16 +3,19 @@ package es.upm.pproject.gym.services.implementations;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import es.upm.pproject.gym.infrastructure.implementations.PersonInfrastructure;
+
+import es.upm.pproject.gym.infrastructure.implementations.InfrastructureFactory;
 import es.upm.pproject.gym.models.Person;
+import es.upm.pproject.gym.services.interfaces.IPersonService;
 
 public class PersonServiceTest {
 
-    private PersonService personService;
+    private IPersonService personService;
 
     @BeforeEach
     void setUp() {
-        personService = new PersonService(new PersonInfrastructure());
+        personService = ServiceFactory.getIPersonService(InfrastructureFactory.getIPersonInfrastructure());
+        InfrastructureFactory.getIPersonInfrastructure().reset(); // Clean state
     }
 
     @Test

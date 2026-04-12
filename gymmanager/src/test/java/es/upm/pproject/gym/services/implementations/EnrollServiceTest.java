@@ -3,24 +3,28 @@ package es.upm.pproject.gym.services.implementations;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import es.upm.pproject.gym.infrastructure.implementations.EnrollInfrastructure;
-import es.upm.pproject.gym.infrastructure.implementations.GymClassInfrastructure;
-import es.upm.pproject.gym.infrastructure.implementations.PersonInfrastructure;
+import es.upm.pproject.gym.infrastructure.implementations.InfrastructureFactory;
 import es.upm.pproject.gym.models.Person;
 import es.upm.pproject.gym.services.exceptions.ClassNotFoundException;
 import es.upm.pproject.gym.services.exceptions.MemberNotFoundException;
+import es.upm.pproject.gym.services.interfaces.IEnrollService;
+import es.upm.pproject.gym.services.interfaces.IGymClassService;
+import es.upm.pproject.gym.services.interfaces.IPersonService;
 
 public class EnrollServiceTest {
 
-    private EnrollService enrollService;
-    private PersonService personService;
-    private GymClassService gymClassService;
+    private IEnrollService enrollService;
+    private IPersonService personService;
+    private IGymClassService gymClassService;
 
     @BeforeEach
     void setUp() {
-        enrollService = new EnrollService(new EnrollInfrastructure());
-        personService = new PersonService(new PersonInfrastructure());
-        gymClassService = new GymClassService(new GymClassInfrastructure());
+        enrollService = ServiceFactory.getIEnrollService(InfrastructureFactory.getIEnrollInfrastructure());
+        personService = ServiceFactory.getIPersonService(InfrastructureFactory.getIPersonInfrastructure());
+        gymClassService = ServiceFactory.getIGymClassService(InfrastructureFactory.getIGymClassInfrastructure());
+        InfrastructureFactory.getIPersonInfrastructure().reset();
+        InfrastructureFactory.getIGymClassInfrastructure().reset();
+        InfrastructureFactory.getIEnrollInfrastructure().reset();
     }
 
     @Test
@@ -36,13 +40,13 @@ public class EnrollServiceTest {
     }
 
     @Test
-    void testEnroll_MemberNotFound() {
+    void testEnroll_MemberNotFound() throws Exception{
         gymClassService.registerClass("Spinning", "Marcos");
         assertThrows(MemberNotFoundException.class, () -> enrollService.enroll("unknown@example.com", "Spinning"));
     }
 
     @Test
-    void testEnroll_ClassNotFound() {
+    void testEnroll_ClassNotFound() throws Exception{
         personService.registerPerson(10, "Carlos", "carlos@example.com");
         assertThrows(ClassNotFoundException.class, () -> enrollService.enroll("carlos@example.com", "UnknownClass"));
     }
