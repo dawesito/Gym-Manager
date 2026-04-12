@@ -50,3 +50,26 @@ The interface provides the following capabilities:
 
 9.  **Exception Handling**:
     *   The system throws specific exceptions when pre-conditions are not met, ensuring robust error handling.
+
+## Technical Details
+
+### Logging System
+The project uses **SLF4J** as a logging facade with **Log4j** as the implementation. 
+- **Configuration**: Managed through `src/main/resources/log4j.properties`.
+- **Output**: Logs are displayed in the console and recorded in `logs/gymmanager.log`.
+- **Levels**: `INFO` for general operations, `DEBUG` for persistence details, `WARN` for important state changes, and `ERROR` for exceptions.
+
+### Testing and Coverage
+Unit testing is implemented with **JUnit 5**. 
+- **Extended Tests**: New test suites have been added to cover infrastructure, models, and edge cases in services.
+- **Coverage**: **JaCoCo** is integrated to measure code coverage.
+- **Run Tests**: Execute `mvn test` to run all tests and generate the coverage report.
+- **Report Location**: After running tests, the report can be found in `target/site/jacoco/index.html`.
+
+### Project Structure
+- `src/main/java`: Source code of the application.
+- `src/main/resources`: Configuration files (e.g., `log4j.properties`).
+- `src/test/java`: Unit and integration tests.
+- `persistence/`: CSV files used for data persistence.
+- `logs/`: Directory where application log files are stored.
+- `pom.xml`: Maven configuration with dependencies for SLF4J, Log4j, and JaCoCo.
